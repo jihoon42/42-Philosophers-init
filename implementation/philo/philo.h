@@ -40,6 +40,7 @@ typedef struct s_philo
 {
 	int				id;
 	int				meals;
+	int				full;
 	long			last_meal;
 	pthread_t		thread;
 	pthread_mutex_t	meal_lock;
@@ -57,6 +58,7 @@ struct s_table
 	pthread_mutex_t	print_lock;
 	pthread_mutex_t	state_lock;
 	int				finished;
+	int				full_count;
 	int				forks_ready;
 	int				meals_ready;
 	int				print_ready;
@@ -68,6 +70,7 @@ int		parse_args(int argc, char **argv, t_rules *rules);
 int		init_table(t_table *table, t_rules *rules);
 int		start_simulation(t_table *table);
 int		is_finished(t_table *table);
+int		philo_alive(t_philo *philo);
 int		write_error(void);
 long	current_time_ms(void);
 long	elapsed_ms(t_table *table);
@@ -84,5 +87,6 @@ int		can_try_eat(t_philo *philo);
 void	release_forks(t_philo *philo);
 int		philo_eat(t_philo *philo);
 int		philo_sleep_think(t_philo *philo);
+int		register_meal(t_philo *philo);
 
 #endif

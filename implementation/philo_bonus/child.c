@@ -16,9 +16,10 @@ static void	single_child(t_philo *philo)
 {
 	sem_wait(philo->table->forks);
 	print_state(philo, MSG_FORK);
-	precise_sleep(philo->table->rules.time_die + 1);
-	sem_post(philo->table->forks);
-	exit(0);
+	precise_sleep(philo->table->rules.time_die);
+	sem_wait(philo->table->print);
+	put_log(philo, MSG_DIE);
+	exit(EXIT_DEAD);
 }
 
 static void	child_loop(t_philo *philo)
@@ -27,10 +28,18 @@ static void	child_loop(t_philo *philo)
 		usleep(1000);
 	while (1)
 	{
-		take_forks(philo);
-		philo_eat(philo);
+		if (!take_forks(philo))
+			wait_for_death();
+		if (!philo_eat(philo))
+		{
+			release_forks(philo);
+			if (philo->meal_sent)
+				exit(EXIT_FULL);
+			wait_for_death();
+		}
 		release_forks(philo);
-		philo_sleep_think(philo);
+		if (!philo_sleep_think(philo))
+			wait_for_death();
 	}
 }
 
@@ -38,11 +47,13 @@ void	run_child(t_philo *philo)
 {
 	pthread_t	monitor;
 
-	if (pthread_create(&monitor, 0, child_monitor, philo) != 0)
-		exit(1);
-	pthread_detach(monitor);
+	if (!open_child_data_lock(philo))
+		exit(EXIT_ERROR);
 	if (philo->table->rules.count == 1)
 		single_child(philo);
+	if (pthread_create(&monitor, 0, child_monitor, philo) != 0)
+		exit(EXIT_ERROR);
+	pthread_detach(monitor);
 	child_loop(philo);
-	exit(0);
+	exit(EXIT_ERROR);
 }

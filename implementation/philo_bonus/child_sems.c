@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   child_sems.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jkim2 <jkim2@student.42seoul.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,54 +12,53 @@
 
 #include "philo_bonus.h"
 
-static void	append_text(char *buffer, int *index, char *text)
+static void	append_text(char *name, int *index, char *text)
 {
 	int	i;
 
 	i = 0;
 	while (text[i])
-	{
-		buffer[*index] = text[i];
-		(*index)++;
-		i++;
-	}
+		name[(*index)++] = text[i++];
 }
 
-static void	append_number(char *buffer, int *index, long number)
+static void	append_id(char *name, int *index, int id)
 {
-	char	digits[20];
+	char	digits[10];
 	int		i;
 
 	i = 0;
-	if (number == 0)
+	if (id == 0)
 		digits[i++] = '0';
-	while (number > 0)
+	while (id > 0)
 	{
-		digits[i] = (char)(number % 10 + '0');
-		number = number / 10;
+		digits[i] = (char)(id % 10 + '0');
+		id = id / 10;
 		i++;
 	}
 	while (i > 0)
-		buffer[(*index)++] = digits[--i];
+		name[(*index)++] = digits[--i];
+	name[*index] = '\0';
 }
 
-void	put_log(t_philo *philo, char *message)
+static void	build_child_name(t_philo *philo, char *name)
 {
-	char	buffer[64];
-	int		index;
+	int	index;
 
 	index = 0;
-	append_number(buffer, &index, elapsed_ms(philo->table));
-	buffer[index++] = ' ';
-	append_number(buffer, &index, philo->id);
-	buffer[index++] = ' ';
-	append_text(buffer, &index, message);
-	buffer[index++] = '\n';
-	write(1, buffer, index);
+	append_text(name, &index, SEM_CHILD_DATA);
+	append_id(name, &index, philo->id);
 }
 
-int	write_error(void)
+int	open_child_data_lock(t_philo *philo)
 {
-	write(2, "Error\n", 6);
+	char	name[32];
+
+	build_child_name(philo, name);
+	sem_close(philo->table->data_lock);
+	sem_unlink(name);
+	philo->table->data_lock = sem_open(name, O_CREAT, 0644, 1);
+	sem_unlink(name);
+	if (philo->table->data_lock == SEM_FAILED)
+		return (0);
 	return (1);
 }

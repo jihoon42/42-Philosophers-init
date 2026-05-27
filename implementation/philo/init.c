@@ -59,6 +59,7 @@ static void	init_philos(t_table *table)
 	{
 		table->philos[i].id = i + 1;
 		table->philos[i].meals = 0;
+		table->philos[i].full = 0;
 		table->philos[i].last_meal = 0;
 		table->philos[i].left_fork = &table->forks[i];
 		table->philos[i].right_fork = &table->forks[(i + 1)
@@ -73,6 +74,7 @@ int	init_table(t_table *table, t_rules *rules)
 {
 	table->rules = *rules;
 	table->finished = 0;
+	table->full_count = 0;
 	table->forks_ready = 0;
 	table->meals_ready = 0;
 	table->print_ready = 0;

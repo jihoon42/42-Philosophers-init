@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print.c                                            :+:      :+:    :+:   */
+/*   sleep.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jkim2 <jkim2@student.42seoul.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,31 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
-int	print_state(t_philo *philo, char *message)
+int	philo_sleep_think(t_philo *philo)
 {
-	int	allowed;
-
-	pthread_mutex_lock(&philo->table->print_lock);
-	allowed = !is_finished(philo->table);
-	if (allowed)
-		allowed = philo_alive(philo);
-	if (allowed)
-		put_log(philo, message);
-	pthread_mutex_unlock(&philo->table->print_lock);
-	return (allowed);
-}
-
-void	print_death(t_philo *philo)
-{
-	pthread_mutex_lock(&philo->table->print_lock);
-	pthread_mutex_lock(&philo->table->state_lock);
-	if (!philo->table->finished)
-	{
-		philo->table->finished = 1;
-		put_log(philo, MSG_DIE);
-	}
-	pthread_mutex_unlock(&philo->table->state_lock);
-	pthread_mutex_unlock(&philo->table->print_lock);
+	if (!print_state(philo, MSG_SLEEP))
+		return (0);
+	precise_sleep(philo->table->rules.time_sleep);
+	if (!print_state(philo, MSG_THINK))
+		return (0);
+	return (1);
 }

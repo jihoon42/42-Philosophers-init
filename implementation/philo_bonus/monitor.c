@@ -12,18 +12,24 @@
 
 #include "philo_bonus.h"
 
-static int	philo_dead(t_philo *philo)
+int	philo_alive(t_philo *philo)
 {
 	long	last_meal;
-	int		dead;
+	int		alive;
 
 	sem_wait(philo->table->data_lock);
 	last_meal = philo->last_meal;
 	sem_post(philo->table->data_lock);
-	dead = 0;
+	alive = 1;
 	if (current_time_ms() - last_meal >= philo->table->rules.time_die)
-		dead = 1;
-	return (dead);
+		alive = 0;
+	return (alive);
+}
+
+void	wait_for_death(void)
+{
+	while (1)
+		usleep(1000);
 }
 
 void	*child_monitor(void *arg)
@@ -33,11 +39,11 @@ void	*child_monitor(void *arg)
 	philo = (t_philo *)arg;
 	while (1)
 	{
-		if (philo_dead(philo))
+		if (!philo_alive(philo))
 		{
 			sem_wait(philo->table->print);
 			put_log(philo, MSG_DIE);
-			exit(1);
+			exit(EXIT_DEAD);
 		}
 		usleep(1000);
 	}

@@ -12,9 +12,14 @@
 
 #include "philo_bonus.h"
 
-void	print_state(t_philo *philo, char *message)
+int	print_state(t_philo *philo, char *message)
 {
+	int	allowed;
+
 	sem_wait(philo->table->print);
-	put_log(philo, message);
+	allowed = philo_alive(philo);
+	if (allowed)
+		put_log(philo, message);
 	sem_post(philo->table->print);
+	return (allowed);
 }

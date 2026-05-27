@@ -22,10 +22,7 @@ int	philo_eat(t_philo *philo)
 	precise_sleep(philo->table, philo->table->rules.time_eat);
 	if (is_finished(philo->table))
 		return (0);
-	pthread_mutex_lock(&philo->meal_lock);
-	philo->meals++;
-	pthread_mutex_unlock(&philo->meal_lock);
-	return (1);
+	return (register_meal(philo));
 }
 
 int	philo_sleep_think(t_philo *philo)

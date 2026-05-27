@@ -20,6 +20,7 @@ static void	set_empty_table(t_table *table)
 	table->meals_sem = 0;
 	table->data_lock = 0;
 	table->seats = 0;
+	table->pick = 0;
 	table->start_time = 0;
 }
 

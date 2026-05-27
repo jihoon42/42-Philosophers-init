@@ -34,3 +34,10 @@ void	precise_sleep(long duration)
 	while (current_time_ms() - start < duration)
 		usleep(500);
 }
+
+void	start_meal_clock(t_philo *philo)
+{
+	sem_wait(philo->table->data_lock);
+	philo->last_meal = current_time_ms();
+	sem_post(philo->table->data_lock);
+}

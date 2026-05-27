@@ -31,7 +31,12 @@
 # define SEM_PRINT "/philo_jkim2_print"
 # define SEM_MEALS "/philo_jkim2_meals"
 # define SEM_DATA "/philo_jkim2_data"
+# define SEM_CHILD_DATA "/philo_jkim2_d_"
 # define SEM_SEATS "/philo_jkim2_seats"
+# define SEM_PICK "/philo_jkim2_pick"
+# define EXIT_FULL 0
+# define EXIT_DEAD 1
+# define EXIT_ERROR 2
 
 typedef struct s_rules
 {
@@ -64,6 +69,7 @@ struct s_table
 	sem_t	*meals_sem;
 	sem_t	*data_lock;
 	sem_t	*seats;
+	sem_t	*pick;
 	long	start_time;
 };
 
@@ -72,9 +78,11 @@ int		init_table(t_table *table, t_rules *rules);
 int		open_semaphores(t_table *table);
 int		start_processes(t_table *table);
 int		run_parent(t_table *table);
+int		open_child_data_lock(t_philo *philo);
 int		write_error(void);
 long	current_time_ms(void);
 long	elapsed_ms(t_table *table);
+void	start_meal_clock(t_philo *philo);
 void	cleanup_table(t_table *table);
 void	close_semaphores(t_table *table);
 void	unlink_semaphores(void);
@@ -82,12 +90,14 @@ void	precise_sleep(long duration);
 void	run_child(t_philo *philo);
 void	*child_monitor(void *arg);
 void	put_log(t_philo *philo, char *message);
-void	print_state(t_philo *philo, char *message);
+int		print_state(t_philo *philo, char *message);
+int		philo_alive(t_philo *philo);
 void	kill_children(t_table *table);
 void	wait_all_children(void);
-void	take_forks(t_philo *philo);
+int		take_forks(t_philo *philo);
 void	release_forks(t_philo *philo);
-void	philo_eat(t_philo *philo);
-void	philo_sleep_think(t_philo *philo);
+int		philo_eat(t_philo *philo);
+int		philo_sleep_think(t_philo *philo);
+void	wait_for_death(void);
 
 #endif

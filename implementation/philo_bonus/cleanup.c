@@ -25,6 +25,7 @@ void	close_semaphores(t_table *table)
 	close_one_sem(table->meals_sem);
 	close_one_sem(table->data_lock);
 	close_one_sem(table->seats);
+	close_one_sem(table->pick);
 }
 
 void	cleanup_table(t_table *table)

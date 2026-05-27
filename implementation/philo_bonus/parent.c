@@ -34,52 +34,52 @@ void	wait_all_children(void)
 	}
 }
 
-static void	post_meal_tokens(t_table *table)
+static int	handle_child_status(t_table *table, int status, int *full)
 {
-	int	i;
-
-	i = 0;
-	while (i < table->rules.count)
-	{
-		sem_post(table->meals_sem);
-		i++;
-	}
-}
-
-static void	*death_watcher(void *arg)
-{
-	t_table	*table;
-	int		status;
-
-	table = (t_table *)arg;
-	if (waitpid(-1, &status, 0) > 0)
+	if (!WIFEXITED(status))
 	{
 		kill_children(table);
-		post_meal_tokens(table);
+		wait_all_children();
+		return (0);
 	}
-	return (0);
+	if (WEXITSTATUS(status) == EXIT_FULL)
+		(*full)++;
+	else if (WEXITSTATUS(status) == EXIT_DEAD)
+	{
+		kill_children(table);
+		wait_all_children();
+		return (2);
+	}
+	else
+	{
+		kill_children(table);
+		wait_all_children();
+		return (0);
+	}
+	return (1);
 }
 
 int	run_parent(t_table *table)
 {
-	pthread_t	watcher;
-	int			i;
+	int	status;
+	int	done;
+	int	full;
+	int	result;
 
-	if (pthread_create(&watcher, 0, death_watcher, table) != 0)
-		return (0);
-	if (!table->rules.has_limit)
-		pthread_join(watcher, 0);
-	i = 0;
-	while (table->rules.has_limit && i < table->rules.count)
+	done = 0;
+	full = 0;
+	while (done < table->rules.count)
 	{
-		sem_wait(table->meals_sem);
-		i++;
+		if (waitpid(-1, &status, 0) <= 0)
+			return (0);
+		result = handle_child_status(table, status, &full);
+		if (result == 0)
+			return (0);
+		if (result == 2)
+			return (1);
+		done++;
 	}
-	if (table->rules.has_limit)
-	{
-		kill_children(table);
-		pthread_join(watcher, 0);
-	}
-	wait_all_children();
-	return (1);
+	if (table->rules.has_limit && full == table->rules.count)
+		return (1);
+	return (0);
 }

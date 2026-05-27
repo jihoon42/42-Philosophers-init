@@ -26,26 +26,6 @@ static int	philo_dead(t_philo *philo)
 	return (dead);
 }
 
-static int	all_eaten(t_table *table)
-{
-	int	i;
-	int	done;
-
-	i = 0;
-	done = 1;
-	while (i < table->rules.count)
-	{
-		pthread_mutex_lock(&table->philos[i].meal_lock);
-		if (table->philos[i].meals < table->rules.must_eat)
-			done = 0;
-		pthread_mutex_unlock(&table->philos[i].meal_lock);
-		if (!done)
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
 void	monitor_table(t_table *table)
 {
 	int	i;
@@ -61,11 +41,6 @@ void	monitor_table(t_table *table)
 				return ;
 			}
 			i++;
-		}
-		if (table->rules.has_limit && all_eaten(table))
-		{
-			set_finished(table);
-			return ;
 		}
 		usleep(1000);
 	}

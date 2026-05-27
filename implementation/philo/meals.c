@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print.c                                            :+:      :+:    :+:   */
+/*   meals.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jkim2 <jkim2@student.42seoul.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,29 +12,45 @@
 
 #include "philo.h"
 
-int	print_state(t_philo *philo, char *message)
+int	philo_alive(t_philo *philo)
 {
-	int	allowed;
+	long	last_meal;
+	int		alive;
 
-	pthread_mutex_lock(&philo->table->print_lock);
-	allowed = !is_finished(philo->table);
-	if (allowed)
-		allowed = philo_alive(philo);
-	if (allowed)
-		put_log(philo, message);
-	pthread_mutex_unlock(&philo->table->print_lock);
-	return (allowed);
+	pthread_mutex_lock(&philo->meal_lock);
+	last_meal = philo->last_meal;
+	pthread_mutex_unlock(&philo->meal_lock);
+	alive = 1;
+	if (current_time_ms() - last_meal >= philo->table->rules.time_die)
+		alive = 0;
+	return (alive);
 }
 
-void	print_death(t_philo *philo)
+static void	mark_full(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->table->print_lock);
 	pthread_mutex_lock(&philo->table->state_lock);
-	if (!philo->table->finished)
-	{
+	philo->table->full_count++;
+	if (philo->table->full_count >= philo->table->rules.count)
 		philo->table->finished = 1;
-		put_log(philo, MSG_DIE);
-	}
 	pthread_mutex_unlock(&philo->table->state_lock);
-	pthread_mutex_unlock(&philo->table->print_lock);
+}
+
+int	register_meal(t_philo *philo)
+{
+	int	keep_running;
+
+	pthread_mutex_lock(&philo->meal_lock);
+	philo->meals++;
+	if (philo->table->rules.has_limit
+		&& philo->meals >= philo->table->rules.must_eat
+		&& !philo->full)
+	{
+		philo->full = 1;
+		mark_full(philo);
+	}
+	keep_running = !philo->full;
+	pthread_mutex_unlock(&philo->meal_lock);
+	if (!philo->table->rules.has_limit)
+		return (1);
+	return (keep_running);
 }

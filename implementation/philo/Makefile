@@ -3,8 +3,9 @@ NAME = philo
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
-SRCS = actions.c cleanup.c forks.c init.c main.c monitor.c parse.c \
-	print.c routine.c schedule.c simulation.c state.c time.c utils.c
+SRCS = actions.c cleanup.c forks.c init.c main.c meals.c monitor.c \
+	parse.c print.c routine.c schedule.c simulation.c state.c time.c \
+	utils.c
 
 OBJS = $(SRCS:.c=.o)
 
