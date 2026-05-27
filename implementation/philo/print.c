@@ -26,6 +26,20 @@ int	print_state(t_philo *philo, char *message)
 	return (allowed);
 }
 
+int	print_meal_start(t_philo *philo)
+{
+	int	allowed;
+
+	pthread_mutex_lock(&philo->table->print_lock);
+	allowed = !is_finished(philo->table);
+	if (allowed)
+		allowed = philo_alive(philo);
+	if (allowed)
+		put_meal_log(philo);
+	pthread_mutex_unlock(&philo->table->print_lock);
+	return (allowed);
+}
+
 void	print_death(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->table->print_lock);

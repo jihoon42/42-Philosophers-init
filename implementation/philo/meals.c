@@ -26,6 +26,34 @@ int	philo_alive(t_philo *philo)
 	return (alive);
 }
 
+int	start_meal_clock(t_philo *philo)
+{
+	long	last_meal;
+	long	now;
+
+	pthread_mutex_lock(&philo->meal_lock);
+	last_meal = philo->last_meal;
+	now = current_time_ms();
+	if (now - last_meal >= philo->table->rules.time_die)
+	{
+		pthread_mutex_unlock(&philo->meal_lock);
+		return (0);
+	}
+	philo->last_meal = now;
+	pthread_mutex_unlock(&philo->meal_lock);
+	return (1);
+}
+
+long	meal_start_time(t_philo *philo)
+{
+	long	start;
+
+	pthread_mutex_lock(&philo->meal_lock);
+	start = philo->last_meal;
+	pthread_mutex_unlock(&philo->meal_lock);
+	return (start);
+}
+
 static void	mark_full(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->table->state_lock);

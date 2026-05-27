@@ -79,6 +79,7 @@ int	init_table(t_table *table, t_rules *rules)
 	table->meals_ready = 0;
 	table->print_ready = 0;
 	table->state_ready = 0;
+	table->ready_count = 0;
 	table->start_time = 0;
 	table->fork_available = 0;
 	table->forks = malloc(sizeof(pthread_mutex_t) * rules->count);

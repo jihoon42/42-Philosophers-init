@@ -1,0 +1,476 @@
+[0;1m
+💭 The Lazy Philosophers Tester 💭
+[0m
+This tester allows you to test:
+
+	1. when your program should stop on death or when all philos have eaten enough
+	- to be checked manually by the user, based on the expected result listed in yes-die.txt.
+
+	2. when no philosophers should die
+	- this is checked automatically if the program runs for x seconds (default 10) without death.
+
+
+[0;36m=== Starting tests where program should end with death or enough eaten ===
+[0m
+Test: [44m[1;97m[1 800 200 200][0m | [0;35ma philo should die[0m
+
+
+0 1 has taken a fork
+800 1 died
+
+Test: [44m[1;97m[4 310 200 100][0m | [0;35ma philo should die[0m
+
+
+0 1 has taken a fork
+0 1 has taken a fork
+0 1 is eating
+0 3 has taken a fork
+0 3 has taken a fork
+0 3 is eating
+200 3 is sleeping
+200 1 is sleeping
+200 2 has taken a fork
+200 2 has taken a fork
+200 2 is eating
+200 4 has taken a fork
+200 4 has taken a fork
+200 4 is eating
+300 1 is thinking
+300 3 is thinking
+310 1 died
+
+Test: [44m[1;97m[4 200 205 200][0m | [0;35ma philo should die[0m
+
+
+0 1 has taken a fork
+0 1 has taken a fork
+0 1 is eating
+0 3 has taken a fork
+0 3 has taken a fork
+0 3 is eating
+200 4 died
+
+Test: [44m[1;97m[5 800 200 200 7][0m | [0;35mno one should die, simulation should stop after 7 eats[0m
+
+
+0 1 has taken a fork
+0 1 has taken a fork
+0 1 is eating
+0 3 has taken a fork
+0 3 has taken a fork
+0 3 is eating
+100 1 is sleeping
+100 5 has taken a fork
+100 3 is sleeping
+100 2 has taken a fork
+100 5 has taken a fork
+100 2 has taken a fork
+100 5 is eating
+100 2 is eating
+200 5 is sleeping
+200 2 is sleeping
+200 1 is thinking
+200 3 is thinking
+200 4 has taken a fork
+200 1 has taken a fork
+200 4 has taken a fork
+200 1 has taken a fork
+200 4 is eating
+200 1 is eating
+300 5 is thinking
+300 4 is sleeping
+300 2 is thinking
+300 1 is sleeping
+300 3 has taken a fork
+300 5 has taken a fork
+300 3 has taken a fork
+300 5 has taken a fork
+300 3 is eating
+300 5 is eating
+400 1 is thinking
+400 5 is sleeping
+400 4 is thinking
+400 3 is sleeping
+400 2 has taken a fork
+400 1 has taken a fork
+400 2 has taken a fork
+400 1 has taken a fork
+400 2 is eating
+400 1 is eating
+500 3 is thinking
+500 5 is thinking
+500 2 is sleeping
+500 1 is sleeping
+500 4 has taken a fork
+500 3 has taken a fork
+500 4 has taken a fork
+500 3 has taken a fork
+500 4 is eating
+500 3 is eating
+600 1 is thinking
+600 3 is sleeping
+600 4 is sleeping
+600 2 is thinking
+600 5 has taken a fork
+600 1 has taken a fork
+600 5 has taken a fork
+600 1 has taken a fork
+600 5 is eating
+600 1 is eating
+700 3 is thinking
+700 1 is sleeping
+700 4 is thinking
+700 5 is sleeping
+700 2 has taken a fork
+700 3 has taken a fork
+700 2 has taken a fork
+700 3 has taken a fork
+700 2 is eating
+700 3 is eating
+800 2 is sleeping
+800 3 is sleeping
+800 1 is thinking
+800 4 has taken a fork
+800 5 is thinking
+800 1 has taken a fork
+800 4 has taken a fork
+800 1 has taken a fork
+800 4 is eating
+800 1 is eating
+900 3 is thinking
+900 1 is sleeping
+900 2 is thinking
+900 5 has taken a fork
+900 4 is sleeping
+900 3 has taken a fork
+900 5 has taken a fork
+900 3 has taken a fork
+900 5 is eating
+900 3 is eating
+1000 1 is thinking
+1000 5 is sleeping
+1000 2 has taken a fork
+1000 2 has taken a fork
+1000 2 is eating
+1000 4 is thinking
+1000 3 is sleeping
+1000 1 has taken a fork
+1000 1 has taken a fork
+1000 1 is eating
+1100 1 is sleeping
+1100 2 is sleeping
+1100 3 is thinking
+1100 5 is thinking
+1100 4 has taken a fork
+1100 3 has taken a fork
+1100 4 has taken a fork
+1100 3 has taken a fork
+1100 4 is eating
+1100 3 is eating
+1200 2 is thinking
+1200 3 is sleeping
+1200 1 is thinking
+1200 4 is sleeping
+1200 5 has taken a fork
+1200 2 has taken a fork
+1200 5 has taken a fork
+1200 2 has taken a fork
+1200 5 is eating
+1200 2 is eating
+1300 2 is sleeping
+1300 5 is sleeping
+1300 3 is thinking
+1300 1 has taken a fork
+1300 4 is thinking
+1300 3 has taken a fork
+1300 1 has taken a fork
+1300 3 has taken a fork
+1300 1 is eating
+1300 3 is eating
+1400 2 is thinking
+1400 5 is thinking
+1400 4 has taken a fork
+1400 2 has taken a fork
+1400 4 has taken a fork
+1400 2 has taken a fork
+1400 4 is eating
+1400 2 is eating
+1500 4 is sleeping
+1500 2 is sleeping
+1500 5 has taken a fork
+1500 5 has taken a fork
+1500 5 is eating
+1600 4 is thinking
+1600 5 is sleeping
+1600 2 is thinking
+1600 4 has taken a fork
+1600 2 has taken a fork
+1600 4 has taken a fork
+1600 2 has taken a fork
+1600 4 is eating
+1600 2 is eating
+1700 4 is sleeping
+1700 5 is thinking
+1700 5 has taken a fork
+1700 5 has taken a fork
+1700 5 is eating
+1800 4 is thinking
+1800 4 has taken a fork
+1800 4 has taken a fork
+1800 4 is eating
+
+Test: [44m[1;97m[4 410 200 200 10][0m | [0;35mno one should die, simulation should stop after 10 eats[0m
+
+
+0 1 has taken a fork
+0 1 has taken a fork
+0 1 is eating
+1 3 has taken a fork
+1 3 has taken a fork
+1 3 is eating
+100 1 is sleeping
+100 2 has taken a fork
+100 2 has taken a fork
+100 2 is eating
+101 3 is sleeping
+101 4 has taken a fork
+101 4 has taken a fork
+101 4 is eating
+200 1 is thinking
+200 2 is sleeping
+200 1 has taken a fork
+200 1 has taken a fork
+200 1 is eating
+201 3 is thinking
+201 4 is sleeping
+201 3 has taken a fork
+201 3 has taken a fork
+201 3 is eating
+300 1 is sleeping
+300 2 is thinking
+300 2 has taken a fork
+300 2 has taken a fork
+300 2 is eating
+301 4 is thinking
+301 3 is sleeping
+301 4 has taken a fork
+301 4 has taken a fork
+301 4 is eating
+400 1 is thinking
+400 2 is sleeping
+400 1 has taken a fork
+400 1 has taken a fork
+400 1 is eating
+401 3 is thinking
+401 4 is sleeping
+401 3 has taken a fork
+401 3 has taken a fork
+401 3 is eating
+500 1 is sleeping
+500 2 is thinking
+500 2 has taken a fork
+500 2 has taken a fork
+500 2 is eating
+501 3 is sleeping
+501 4 is thinking
+501 4 has taken a fork
+501 4 has taken a fork
+501 4 is eating
+600 1 is thinking
+600 2 is sleeping
+600 1 has taken a fork
+600 1 has taken a fork
+600 1 is eating
+601 4 is sleeping
+601 3 is thinking
+601 3 has taken a fork
+601 3 has taken a fork
+601 3 is eating
+700 2 is thinking
+700 1 is sleeping
+700 2 has taken a fork
+700 2 has taken a fork
+700 2 is eating
+701 4 is thinking
+701 3 is sleeping
+701 4 has taken a fork
+701 4 has taken a fork
+701 4 is eating
+800 2 is sleeping
+800 1 is thinking
+800 1 has taken a fork
+800 1 has taken a fork
+800 1 is eating
+801 4 is sleeping
+801 3 is thinking
+801 3 has taken a fork
+801 3 has taken a fork
+801 3 is eating
+900 2 is thinking
+900 1 is sleeping
+900 2 has taken a fork
+900 2 has taken a fork
+900 2 is eating
+901 4 is thinking
+901 3 is sleeping
+901 4 has taken a fork
+901 4 has taken a fork
+901 4 is eating
+1000 1 is thinking
+1000 2 is sleeping
+1000 1 has taken a fork
+1000 1 has taken a fork
+1000 1 is eating
+1001 4 is sleeping
+1001 3 is thinking
+1001 3 has taken a fork
+1001 3 has taken a fork
+1001 3 is eating
+1100 1 is sleeping
+1100 2 is thinking
+1100 2 has taken a fork
+1100 2 has taken a fork
+1100 2 is eating
+1101 3 is sleeping
+1101 4 is thinking
+1101 4 has taken a fork
+1101 4 has taken a fork
+1101 4 is eating
+1200 2 is sleeping
+1200 1 is thinking
+1200 1 has taken a fork
+1200 1 has taken a fork
+1200 1 is eating
+1201 3 is thinking
+1201 4 is sleeping
+1201 3 has taken a fork
+1201 3 has taken a fork
+1201 3 is eating
+1300 1 is sleeping
+1300 2 is thinking
+1300 2 has taken a fork
+1300 2 has taken a fork
+1300 2 is eating
+1301 4 is thinking
+1301 3 is sleeping
+1301 4 has taken a fork
+1301 4 has taken a fork
+1301 4 is eating
+1400 1 is thinking
+1400 2 is sleeping
+1400 1 has taken a fork
+1400 1 has taken a fork
+1400 1 is eating
+1401 3 is thinking
+1401 4 is sleeping
+1401 3 has taken a fork
+1401 3 has taken a fork
+1401 3 is eating
+1500 2 is thinking
+1500 1 is sleeping
+1500 2 has taken a fork
+1500 2 has taken a fork
+1500 2 is eating
+1501 4 is thinking
+1501 3 is sleeping
+1501 4 has taken a fork
+1501 4 has taken a fork
+1501 4 is eating
+1600 1 is thinking
+1600 2 is sleeping
+1600 1 has taken a fork
+1600 1 has taken a fork
+1600 1 is eating
+1601 4 is sleeping
+1601 3 is thinking
+1601 3 has taken a fork
+1601 3 has taken a fork
+1601 3 is eating
+1700 2 is thinking
+1700 1 is sleeping
+1700 2 has taken a fork
+1700 2 has taken a fork
+1700 2 is eating
+1701 4 is thinking
+1701 3 is sleeping
+1701 4 has taken a fork
+1701 4 has taken a fork
+1701 4 is eating
+1800 1 is thinking
+1800 2 is sleeping
+1800 1 has taken a fork
+1800 1 has taken a fork
+1800 1 is eating
+1801 3 is thinking
+1801 4 is sleeping
+1801 3 has taken a fork
+1801 3 has taken a fork
+1801 3 is eating
+1900 2 is thinking
+1900 2 has taken a fork
+1900 2 has taken a fork
+1900 2 is eating
+1901 4 is thinking
+1901 4 has taken a fork
+1901 4 has taken a fork
+1901 4 is eating
+
+Test: [44m[1;97m[-5 600 200 200][0m | [0;35mshould error and not run (no crashing)[0m
+
+
+Error
+
+Test: [44m[1;97m[4 -5 200 200][0m | [0;35mshould error and not run (no crashing)[0m
+
+
+Error
+
+Test: [44m[1;97m[4 600 -5 200][0m | [0;35mshould error and not run (no crashing)[0m
+
+
+Error
+
+Test: [44m[1;97m[4 600 200 -5][0m | [0;35mshould error and not run (no crashing)[0m
+
+
+Error
+
+Test: [44m[1;97m[4 600 200 200 -5][0m | [0;35mshould error and not run (no crashing)[0m
+
+
+Error
+
+[0;36m=== Starting tests where a philosopher should NOT die ===
+[0m
+
+Test: [44m[1;97m[5 800 200 200][0m | [0;35mno one should die[0m
+
+
+killall: could not sysctl(KERN_PROC): Operation not permitted
+
+Test: [44m[1;97m[5 600 150 150][0m | [0;35mno one should die[0m
+
+
+killall: could not sysctl(KERN_PROC): Operation not permitted
+
+Test: [44m[1;97m[4 410 200 200][0m | [0;35mno one should die[0m
+
+
+killall: could not sysctl(KERN_PROC): Operation not permitted
+
+Test: [44m[1;97m[100 800 200 200][0m | [0;35mno one should die[0m
+
+
+killall: could not sysctl(KERN_PROC): Operation not permitted
+
+Test: [44m[1;97m[105 800 200 200][0m | [0;35mno one should die[0m
+
+
+killall: could not sysctl(KERN_PROC): Operation not permitted
+
+Test: [44m[1;97m[200 800 200 200][0m | [0;35mno one should die[0m
+
+
+killall: could not sysctl(KERN_PROC): Operation not permitted
+
+No-Die Tests: [0;32mPASSED[0m: 0/6 | [0;31mFAILED[0m: 0/6

@@ -12,6 +12,28 @@
 
 #include "philo.h"
 
+static int	wait_start(t_table *table)
+{
+	int	started;
+	int	finished;
+
+	started = 0;
+	finished = 0;
+	pthread_mutex_lock(&table->state_lock);
+	table->ready_count++;
+	pthread_mutex_unlock(&table->state_lock);
+	while (!started && !finished)
+	{
+		pthread_mutex_lock(&table->state_lock);
+		started = (table->start_time != 0);
+		finished = table->finished;
+		pthread_mutex_unlock(&table->state_lock);
+		if (!started && !finished)
+			usleep(100);
+	}
+	return (!finished);
+}
+
 static void	*single_routine(t_philo *philo)
 {
 	pthread_mutex_lock(philo->left_fork);
@@ -43,10 +65,10 @@ void	*philo_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
+	if (!wait_start(philo->table))
+		return (0);
 	if (philo->table->rules.count == 1)
 		return (single_routine(philo));
-	if (philo->id % 2 == 0)
-		usleep(1000);
 	philo_loop(philo);
 	return (0);
 }

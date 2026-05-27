@@ -14,12 +14,11 @@
 
 int	philo_eat(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->meal_lock);
-	philo->last_meal = current_time_ms();
-	pthread_mutex_unlock(&philo->meal_lock);
-	if (!print_state(philo, MSG_EAT))
-		return (0);
-	precise_sleep(philo->table, philo->table->rules.time_eat);
+	long	meal_start;
+
+	meal_start = meal_start_time(philo);
+	relaxed_sleep(philo->table, meal_start + philo->table->rules.time_eat
+		- current_time_ms());
 	if (is_finished(philo->table))
 		return (0);
 	return (register_meal(philo));
@@ -27,10 +26,18 @@ int	philo_eat(t_philo *philo)
 
 int	philo_sleep_think(t_philo *philo)
 {
+	long	meal_start;
+	long	time_left;
+
+	meal_start = meal_start_time(philo);
 	if (!print_state(philo, MSG_SLEEP))
 		return (0);
-	precise_sleep(philo->table, philo->table->rules.time_sleep);
-	if (!print_state(philo, MSG_THINK))
+	relaxed_sleep(philo->table, meal_start + philo->table->rules.time_eat
+		+ philo->table->rules.time_sleep - current_time_ms());
+	time_left = meal_start + philo->table->rules.time_die - current_time_ms();
+	if (time_left > philo->table->rules.time_eat
+		+ philo->table->rules.time_sleep + 10
+		&& !print_state(philo, MSG_THINK))
 		return (0);
 	return (1);
 }

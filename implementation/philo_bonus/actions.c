@@ -12,25 +12,30 @@
 
 #include "philo_bonus.h"
 
+static int	wait_turn(t_philo *philo)
+{
+	while (!can_try_eat(philo))
+	{
+		if (!philo_alive(philo))
+			return (0);
+		usleep(100);
+	}
+	return (1);
+}
+
 int	take_forks(t_philo *philo)
 {
+	if (!wait_turn(philo))
+		return (0);
 	sem_wait(philo->table->seats);
-	sem_wait(philo->table->pick);
 	sem_wait(philo->table->forks);
 	sem_wait(philo->table->forks);
-	sem_post(philo->table->pick);
-	if (!philo_alive(philo))
+	if (!start_meal_clock(philo))
 	{
 		release_forks(philo);
 		return (0);
 	}
-	start_meal_clock(philo);
-	if (!print_state(philo, MSG_FORK))
-	{
-		release_forks(philo);
-		return (0);
-	}
-	if (!print_state(philo, MSG_FORK))
+	if (!print_state(philo, MSG_FORK) || !print_state(philo, MSG_FORK))
 	{
 		release_forks(philo);
 		return (0);
@@ -60,14 +65,14 @@ static int	register_meal(t_philo *philo)
 
 int	philo_eat(t_philo *philo)
 {
-	int	keep_running;
+	int		keep_running;
+	long	meal_start;
 
-	sem_wait(philo->table->data_lock);
-	philo->last_meal = current_time_ms();
-	sem_post(philo->table->data_lock);
+	meal_start = meal_start_time(philo);
 	if (!print_state(philo, MSG_EAT))
 		return (0);
-	precise_sleep(philo->table->rules.time_eat);
+	relaxed_sleep(philo->table, meal_start + philo->table->rules.time_eat
+		- current_time_ms());
 	if (!philo_alive(philo))
 		return (0);
 	sem_wait(philo->table->data_lock);

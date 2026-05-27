@@ -26,11 +26,58 @@ long	elapsed_ms(t_table *table)
 	return (current_time_ms() - table->start_time);
 }
 
+static long	minimum_cycle(t_table *table)
+{
+	long	cycle;
+	long	rest;
+
+	if (table->rules.count % 2 == 0)
+		cycle = table->rules.time_eat * 2;
+	else
+		cycle = table->rules.time_eat * 3;
+	rest = table->rules.time_eat + table->rules.time_sleep;
+	if (rest > cycle)
+		return (rest);
+	return (cycle);
+}
+
 void	precise_sleep(t_table *table, long duration)
 {
-	long	start;
+	long	target;
+	long	remaining;
 
-	start = current_time_ms();
-	while (!is_finished(table) && current_time_ms() - start < duration)
-		usleep(500);
+	target = current_time_ms() + duration;
+	while (!is_finished(table))
+	{
+		remaining = target - current_time_ms();
+		if (remaining <= 0)
+			return ;
+		if (remaining > 1)
+			usleep(100);
+	}
+}
+
+void	relaxed_sleep(t_table *table, long duration)
+{
+	long	target;
+	long	remaining;
+	long	margin;
+
+	if (table->rules.count <= 1
+		|| table->rules.time_die <= minimum_cycle(table))
+	{
+		precise_sleep(table, duration);
+		return ;
+	}
+	target = current_time_ms() + duration;
+	margin = duration / 2;
+	if (margin > 100)
+		margin = 100;
+	while (!is_finished(table))
+	{
+		remaining = target - current_time_ms();
+		if (remaining <= margin)
+			return ;
+		usleep(100);
+	}
 }

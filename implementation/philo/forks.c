@@ -49,7 +49,7 @@ static int	reserve_forks(t_philo *philo, int left, int right)
 			}
 			unlock_fork_pair(philo->table, left, right);
 		}
-		usleep(500);
+		usleep(100);
 	}
 	return (0);
 }
@@ -63,12 +63,12 @@ int	take_forks(t_philo *philo)
 	right = philo->id % philo->table->rules.count;
 	if (!reserve_forks(philo, left, right))
 		return (0);
-	if (!print_state(philo, MSG_FORK))
+	if (!start_meal_clock(philo))
 	{
 		release_forks(philo);
 		return (0);
 	}
-	if (!print_state(philo, MSG_FORK))
+	if (!print_meal_start(philo))
 	{
 		release_forks(philo);
 		return (0);

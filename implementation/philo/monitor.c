@@ -18,6 +18,11 @@ static int	philo_dead(t_philo *philo)
 	int		dead;
 
 	pthread_mutex_lock(&philo->meal_lock);
+	if (philo->full)
+	{
+		pthread_mutex_unlock(&philo->meal_lock);
+		return (0);
+	}
 	last_meal = philo->last_meal;
 	pthread_mutex_unlock(&philo->meal_lock);
 	dead = 0;

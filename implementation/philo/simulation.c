@@ -12,17 +12,21 @@
 
 #include "philo.h"
 
-static void	set_start_times(t_table *table)
+static void	release_start(t_table *table)
 {
 	int	i;
 
 	i = 0;
+	pthread_mutex_lock(&table->state_lock);
 	table->start_time = current_time_ms();
 	while (i < table->rules.count)
 	{
+		pthread_mutex_lock(&table->philos[i].meal_lock);
 		table->philos[i].last_meal = table->start_time;
+		pthread_mutex_unlock(&table->philos[i].meal_lock);
 		i++;
 	}
+	pthread_mutex_unlock(&table->state_lock);
 }
 
 static int	create_threads(t_table *table)
@@ -38,6 +42,21 @@ static int	create_threads(t_table *table)
 		i++;
 	}
 	return (i);
+}
+
+static void	wait_workers_ready(t_table *table)
+{
+	int	ready;
+
+	ready = 0;
+	while (!ready)
+	{
+		pthread_mutex_lock(&table->state_lock);
+		ready = (table->ready_count >= table->rules.count);
+		pthread_mutex_unlock(&table->state_lock);
+		if (!ready)
+			usleep(100);
+	}
 }
 
 static void	join_threads(t_table *table, int count)
@@ -56,7 +75,6 @@ int	start_simulation(t_table *table)
 {
 	int	created;
 
-	set_start_times(table);
 	created = create_threads(table);
 	if (created != table->rules.count)
 	{
@@ -64,6 +82,8 @@ int	start_simulation(t_table *table)
 		join_threads(table, created);
 		return (0);
 	}
+	wait_workers_ready(table);
+	release_start(table);
 	monitor_table(table);
 	join_threads(table, created);
 	return (1);

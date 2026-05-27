@@ -28,16 +28,43 @@ long	elapsed_ms(t_table *table)
 
 void	precise_sleep(long duration)
 {
-	long	start;
+	long	target;
+	long	remaining;
 
-	start = current_time_ms();
-	while (current_time_ms() - start < duration)
-		usleep(500);
+	target = current_time_ms() + duration;
+	while (1)
+	{
+		remaining = target - current_time_ms();
+		if (remaining <= 0)
+			return ;
+		usleep(100);
+	}
 }
 
-void	start_meal_clock(t_philo *philo)
+int	start_meal_clock(t_philo *philo)
 {
+	long	last_meal;
+	long	now;
+
 	sem_wait(philo->table->data_lock);
-	philo->last_meal = current_time_ms();
+	last_meal = philo->last_meal;
+	now = current_time_ms();
+	if (now - last_meal >= philo->table->rules.time_die)
+	{
+		sem_post(philo->table->data_lock);
+		return (0);
+	}
+	philo->last_meal = now;
 	sem_post(philo->table->data_lock);
+	return (1);
+}
+
+long	meal_start_time(t_philo *philo)
+{
+	long	start;
+
+	sem_wait(philo->table->data_lock);
+	start = philo->last_meal;
+	sem_post(philo->table->data_lock);
+	return (start);
 }

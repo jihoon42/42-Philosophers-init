@@ -63,6 +63,7 @@ struct s_table
 	int				meals_ready;
 	int				print_ready;
 	int				state_ready;
+	int				ready_count;
 	long			start_time;
 };
 
@@ -80,10 +81,15 @@ void	precise_sleep(t_table *table, long duration);
 void	*philo_routine(void *arg);
 void	monitor_table(t_table *table);
 void	put_log(t_philo *philo, char *message);
+void	put_meal_log(t_philo *philo);
 void	print_death(t_philo *philo);
 int		print_state(t_philo *philo, char *message);
+int		print_meal_start(t_philo *philo);
 int		take_forks(t_philo *philo);
 int		can_try_eat(t_philo *philo);
+void	relaxed_sleep(t_table *table, long duration);
+int		start_meal_clock(t_philo *philo);
+long	meal_start_time(t_philo *philo);
 void	release_forks(t_philo *philo);
 int		philo_eat(t_philo *philo);
 int		philo_sleep_think(t_philo *philo);

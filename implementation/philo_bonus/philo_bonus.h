@@ -33,7 +33,6 @@
 # define SEM_DATA "/philo_jkim2_data"
 # define SEM_CHILD_DATA "/philo_jkim2_d_"
 # define SEM_SEATS "/philo_jkim2_seats"
-# define SEM_PICK "/philo_jkim2_pick"
 # define EXIT_FULL 0
 # define EXIT_DEAD 1
 # define EXIT_ERROR 2
@@ -69,7 +68,6 @@ struct s_table
 	sem_t	*meals_sem;
 	sem_t	*data_lock;
 	sem_t	*seats;
-	sem_t	*pick;
 	long	start_time;
 };
 
@@ -82,11 +80,13 @@ int		open_child_data_lock(t_philo *philo);
 int		write_error(void);
 long	current_time_ms(void);
 long	elapsed_ms(t_table *table);
-void	start_meal_clock(t_philo *philo);
+int		start_meal_clock(t_philo *philo);
+long	meal_start_time(t_philo *philo);
 void	cleanup_table(t_table *table);
 void	close_semaphores(t_table *table);
 void	unlink_semaphores(void);
 void	precise_sleep(long duration);
+void	relaxed_sleep(t_table *table, long duration);
 void	run_child(t_philo *philo);
 void	*child_monitor(void *arg);
 void	put_log(t_philo *philo, char *message);
@@ -95,6 +95,7 @@ int		philo_alive(t_philo *philo);
 void	kill_children(t_table *table);
 void	wait_all_children(void);
 int		take_forks(t_philo *philo);
+int		can_try_eat(t_philo *philo);
 void	release_forks(t_philo *philo);
 int		philo_eat(t_philo *philo);
 int		philo_sleep_think(t_philo *philo);
